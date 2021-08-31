@@ -38,39 +38,7 @@ services:
       - "traefik.http.routers.whoami.entrypoints=websecure"
       - "traefik.http.routers.whoami.tls=true"
       - "traefik.http.routers.whoami.tls.certresolver=myresolver"
-      - "traefik.http.routers.whoami.rule=Host(`speedtest.onelumen.co.uk`)"
-
-# services:
-#   traefik:
-#     image: traefik:${VERSION}
-#     container_name: traefik
-#     command:
-#       - --log.level=DEBUG
-#       - --api.insecure=true 
-#       - --providers.docker=true 
-#       - --providers.docker.exposedbydefault=false 
-#       - --log.level=${LOG}
-#       - --entrypoints.http.address=:80 
-#       - --entrypoints.https.address=:443
-#       # cert resolver
-#       - --certificatesresolvers.myresolver.acme.dnschallenge=true
-#       - --certificatesresolvers.${PROVIDER}.acme.dnschallenge.provider=${PROVIDER}
-#       - --certificatesresolvers.${PROVIDER}.acme.dnschallenge.delayBeforeCheck=0
-#       - --certificatesresolvers.${PROVIDER}.acme.dnschallenge.resolvers=${RESOLVER}
-#       - --certificatesresolvers.${PROVIDER}.acme.email=${EMAIL}
-#       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-#     environment: 
-#       - TZ
-#       - AWS_ACCESS_KEY_ID
-#       - AWS_REGION
-#       - AWS_SECRET_ACCESS_KEY
-#       - AWS_HOSTED_ZONE_ID
-#     ports:
-#       - "443:443"
-#       - "80:8080"
-#     volumes:
-#       - letsencrypt:/letsencrypt
-#       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "traefik.http.routers.whoami.rule=Host(`YoUr.DomaIn.COm`)"
 
 volumes:
   letsencrypt:
