@@ -18,7 +18,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
-      - "8080:8080"
+      # - "8080:8080"
       - "443:443"
     environment: 
       - TZ
@@ -30,15 +30,30 @@ services:
       - "letsencrypt:/letsencrypt"
       - "./traefik.yml:/traefik/traefik.yml"
 
-  whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
+  librespeed:
+    image: ghcr.io/linuxserver/librespeed
+    container_name: librespeed
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      # - PASSWORD=PASSWORD
+      # - CUSTOM_RESULTS=false #optional
+      # - DB_TYPE=sqlite #optional
+      # - DB_NAME=DB_NAME #optional
+      # - DB_HOSTNAME=DB_HOSTNAME #optional
+      # - DB_USERNAME=DB_USERNAME #optional
+      # - DB_PASSWORD=DB_PASSWORD #optional
+      # - DB_PORT=DB_PORT #optional
+    # volumes:
+    #   - /path/to/appdata/config:/config
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.entrypoints=websecure"
       - "traefik.http.routers.whoami.tls=true"
       - "traefik.http.routers.whoami.tls.certresolver=myresolver"
-      - "traefik.http.routers.whoami.rule=Host(`YoUr.DomaIn.COm`)"
+      - "traefik.http.routers.whoami.rule=Host(`${SPEEDTEST}`)"
 
 volumes:
   letsencrypt:
