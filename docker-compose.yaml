@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.4"
 services:
   traefik:
     image: "traefik:${VERSION}"
@@ -10,6 +10,8 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure" #redirect all traffic to https
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https" #redirect all traffic to https
       - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
       - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=${PROVIDER}"
       - "--certificatesresolvers.myresolver.acme.dnschallenge.resolvers=${RESOLVER}"
@@ -24,7 +26,8 @@ services:
       - TZ
       - CF_DNS_API_TOKEN
       - CF_ZONE_API_TOKEN
-      
+    networks:
+      - proxy-net
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "letsencrypt:/letsencrypt"
@@ -37,23 +40,19 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
-      # - PASSWORD=PASSWORD
-      # - CUSTOM_RESULTS=false #optional
-      # - DB_TYPE=sqlite #optional
-      # - DB_NAME=DB_NAME #optional
-      # - DB_HOSTNAME=DB_HOSTNAME #optional
-      # - DB_USERNAME=DB_USERNAME #optional
-      # - DB_PASSWORD=DB_PASSWORD #optional
-      # - DB_PORT=DB_PORT #optional
-    # volumes:
-    #   - /path/to/appdata/config:/config
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls=true"
-      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
-      - "traefik.http.routers.whoami.rule=Host(`${SPEEDTEST}`)"
+      - "traefik.http.routers.speedtest.entrypoints=websecure"
+      - "traefik.http.routers.speedtest.tls=true"
+      - "traefik.http.routers.speedtest.tls.certresolver=myresolver"
+      - "traefik.http.routers.speedtest.rule=Host(`${SPEEDTEST}`)"
+    networks:
+      - proxy-net
 
 volumes:
   letsencrypt:
+
+networks: #Create network manually if error on creating network due to host restriction e.g. docker create network prometheus
+  proxy-net:
+    external: true
