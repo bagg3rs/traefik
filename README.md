@@ -1,4 +1,4 @@
-# traefik v2 docker-conpose example
+# Traefik v2 docker-compose example
 
 ## details
 Docker-Compose for Traefik using DNS Challenge with Cloudflare. 
