@@ -53,6 +53,6 @@ services:
 volumes:
   letsencrypt:
 
-networks: #Create network manually if error on creating network due to host restriction e.g. docker create network prometheus
+networks: #Create network manually if error on creating network due to host restriction e.g. docker create network proxynet
   proxy-net:
     external: true
