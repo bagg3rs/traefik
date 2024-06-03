@@ -1,7 +1,7 @@
 # Traefik v2 docker-compose example
 
 ## details
-Docker-Compose for Traefik using DNS Challenge with Cloudflare. 
+Docker-Compose for Traefik, DNS Challenge with Cloudflare automatically creates wildcard certificates for labelled containers. 
 
 <img width="1469" alt="image" src="https://user-images.githubusercontent.com/20583399/163053200-7ca3506a-eec0-4ec1-80d9-35645bf872f4.png">
 
