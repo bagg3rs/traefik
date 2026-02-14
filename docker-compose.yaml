@@ -1,11 +1,11 @@
 version: "3.4"
 services:
   traefik:
-    image: "traefik:${VERSION}"
+    image: "traefik:v2.10"
     container_name: "traefik"
     command:
-      # - "--log.level=${LOG}"
-      - "--api.insecure=true"
+      - "--log.level=${LOG}"
+      - "--api.dashboard=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
@@ -20,7 +20,6 @@ services:
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
-      # - "8080:8080"
       - "443:443"
     environment: 
       - TZ
@@ -32,6 +31,15 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "letsencrypt:/letsencrypt"
       - "./traefik.yml:/traefik/traefik.yml"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`${DASHBOARD}`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=${DASHBOARD_AUTH}"
 
   librespeed:
     image: ghcr.io/linuxserver/librespeed
