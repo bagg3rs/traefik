@@ -15,7 +15,7 @@ certificatesResolvers:
       email: ${EMAIL}
       storage: /letsencrypt/acme.json
       dnsChallenge:
-        provider: route53
+        provider: cloudflare
         delayBeforeCheck: 0
 ################################################################
 # Traefik Logging
