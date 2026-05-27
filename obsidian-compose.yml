@@ -1,0 +1,30 @@
+version: "3.4"
+
+services:
+  obsidian:
+    image: sytone/obsidian-remote:latest
+    container_name: obsidian
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /home/rb/obsidian-vault:/vaults
+      - obsidian-config:/config
+    networks:
+      - proxy-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.obsidian.rule=Host(`${OBSIDIAN}`)"
+      - "traefik.http.routers.obsidian.entrypoints=websecure"
+      - "traefik.http.routers.obsidian.tls=true"
+      - "traefik.http.routers.obsidian.tls.certresolver=myresolver"
+      - "traefik.http.services.obsidian.loadbalancer.server.port=8080"
+
+volumes:
+  obsidian-config:
+
+networks:
+  proxy-net:
+    external: true
